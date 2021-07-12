@@ -6,12 +6,14 @@ import reportWebVitals from './reportWebVitals';
 
 import { createStore } from 'redux';
 
+import { Provider } from "react-redux";
+
 const reducer = (state, action)=>{
   if(state === undefined){
-    return 0
+    return {n: 0}
   }else{
     if(action.type === 'add'){
-      var newState = state + action.payload
+      var newState = {n: state.n + action.payload} 
       return newState
     }else{
       return state
@@ -20,40 +22,13 @@ const reducer = (state, action)=>{
 }
 
 const store = createStore(reducer) //初始化store
-render()
-store.subscribe(()=>{
-  render()
-})
 
-
-function add3(){
-  var oldState = store.getState()
-  if(oldState % 2 === 1){
-    store.dispatch({type:'add', payload: 1}) 
-  }
-}
-
-
-function add4(){
-  setTimeout(()=>{
-    store.dispatch({type: 'add', payload: 1})
-  },2000)
-}
-
-
-function render(){
-  ReactDOM.render(
-    <React.StrictMode>
-      <App value={store.getState()} 
-        onAdd1={()=>{store.dispatch({type: 'add', payload: 1})}}
-        onAdd2={()=>{store.dispatch({type: 'add', payload: 2})}}
-        onAdd3={add3}
-        onAdd4={add4}
-      />
-    </React.StrictMode>,
-    document.getElementById('root')
-  );
-}
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
 
 
 
